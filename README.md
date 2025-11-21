@@ -35,11 +35,11 @@ This guidance graph is the only structural prior required by the SCGLUE training
 
 ## 2. SCGLUE Cross-Modality Integration (`2.run_scglue.py`)
 
-This script performs the full SCGLUE workflow to integrate subsampled scRNA-seq and scATAC-seq profiles into a shared latent space. It uses the guidance graph generated in Step 1 to anchor genes and chromatin peaks through regulatory relationships. Users may either run the script with its default settings or override any hyperparameter using command-line options.
+This script performs the complete SCGLUE workflow to integrate subsampled scRNA-seq and scATAC-seq profiles into a unified latent embedding. Unlike the original SCGLUE implementation that timestamps model runs, this pipeline produces **deterministic, timestamp-free outputs** for full reproducibility.
 
 ### Workflow summary
 
-This script implements the following steps:
+This script performs the following steps:
 
 1. **Load input data**
    - `rna_subsampled.h5ad`
@@ -48,45 +48,48 @@ This script implements the following steps:
 
 2. **Graph preprocessing**
    - Add self-loops to all nodes
-   - Standardize edge attributes (`weight`, `sign`)
+   - Ensure edge attributes (`weight`, `sign`) are present
 
 3. **Metadata cleanup**
-   - Validate finite values in `.X`
-   - Normalize category fields
-   - Ensure the presence of `highly_variable` features
+   - Normalize categorical fields
+   - Ensure `.X` contains finite values
+   - Set `highly_variable` flags if missing
 
 4. **Feature representation**
-   - PCA on RNA (default: 50 components)
-   - LSI on ATAC (default: 50 components)
-   - Optional filtering of ATAC peaks to those in the guidance graph
+   - Compute PCA for RNA (default: 50 components)
+   - Compute LSI for ATAC (default: 50 components)
+   - Optionally filter ATAC peaks to those present in the guidance graph
 
 5. **Cell-type harmonization**
-   - Map fine-grained RNA and ATAC labels to broader categories
-   - Store harmonized labels in `glue_cell_type`
+   - Map fine-grained RNA labels (e.g., `EN-ET`, `IN`, `OPC`) to coarse labels
+   - Map ATAC cluster labels to the same set of categories
+   - Store final labels in `glue_cell_type`
 
 6. **Configure SCGLUE datasets**
-   - RNA modeled using a Normal distribution
-   - ATAC modeled using a Zero-Inflated Log-Normal distribution
-   - Use PCA/LSI representations and HV features
+   - RNA modeled with a Normal likelihood (`Normal`)
+   - ATAC modeled with a Zero-Inflated Log-Normal likelihood (`ZILN`)
+   - Use PCA/LSI features and HV feature masks
 
 7. **Train SCGLUE**
-   - Fully configurable training schedule:
+   - All hyperparameters are configurable via CLI flags:
      - `--max_epochs` (default: 100)
      - `--batch_size` (default: 256)
      - `--align_burnin` (default: 30)
      - `--graph_batch` (default: 7500)
-   - All logs are written to `./logs/`
+   - All logs are written to `./logs/glue.log`
 
 8. **Embedding and visualization**
    - Encode RNA and ATAC into `X_glue`
-   - Compute joint UMAP layout
-   - Save RNA-only and ATAC-only UMAP images
+   - Compute joint UMAP embedding
+   - Produce separate UMAP plots for RNA-only and ATAC-only cells
 
 9. **Save outputs**
-   - Trained SCGLUE model (`.dill`)
-   - Embedded `.h5ad` files
-   - UMAP visualizations
-   - Reproducibility log files
+   - Trained SCGLUE model (`glue_model.dill`)
+   - RNA/ATAC `.h5ad` files containing the `X_glue` embedding
+   - UMAP visualizations:
+     - `umap_rna.png`
+     - `umap_atac.png`
+   - All logs stored in `logs/glue.log`
 
 ### Running the script
 
@@ -97,6 +100,7 @@ python 2.run_scglue.py
 ```
 
 Customize hyperparameters:
+
 ```bash
 python 2.run_scglue.py \
     --n_comps 64 \
@@ -105,30 +109,31 @@ python 2.run_scglue.py \
     --graph_batch 5000 \
     --align_burnin 20
 ```
+
 ### Hyperparameter reference
 
 | Parameter         | CLI Flag          | Default | Description |
 |------------------|-------------------|---------|-------------|
-| `n_comps`        | `--n_comps`       | 50      | Number of PCA components for RNA and LSI components for ATAC. Controls dimensionality of the initial feature representation. |
-| `max_epochs`     | `--max_epochs`    | 100     | Maximum number of training epochs for SCGLUE. |
-| `batch_size`     | `--batch_size`    | 256     | Mini-batch size for training RNA/ATAC data batches. |
-| `graph_batch`    | `--graph_batch`   | 7500    | Number of graph edges used per graph batch during SCGLUE graph training. |
-| `patience`       | `--patience`      | 20      | Number of epochs without improvement before early stopping is triggered. |
-| `lr_patience`    | `--lr_patience`   | 15      | Number of stagnant epochs before reducing the learning rate. |
-| `align_burnin`   | `--align_burnin`  | 30      | Number of epochs during which the model focuses on learning cell-type structure before enforcing cross-modality alignment. |
+| `n_comps`        | `--n_comps`       | 50      | Number of PCA/LSI components. |
+| `max_epochs`     | `--max_epochs`    | 100     | Maximum training epochs. |
+| `batch_size`     | `--batch_size`    | 256     | RNA/ATAC mini-batch size. |
+| `graph_batch`    | `--graph_batch`   | 7500    | Number of edges sampled per graph batch. |
+| `patience`       | `--patience`      | 20      | Early-stopping patience. |
+| `lr_patience`    | `--lr_patience`   | 15      | LR schedule patience. |
+| `align_burnin`   | `--align_burnin`  | 30      | Epochs to delay cross-modality alignment. |
 
+### Output structure (timestamp-free)
 
-
-Output structure
-```bash
+```
 model/
-    glue_run_YYYYMMDD-HHMMSS/
-        glue_model_*.dill
-        umap_RNA_only_*.png
-        umap_ATAC_only_*.png
-        rna_with_Xglue_*.h5ad
-        atac_with_Xglue_*.h5ad
+    glue_run/
+        glue_model.dill
+        umap_rna.png
+        umap_atac.png
+        rna_with_Xglue.h5ad
+        atac_with_Xglue.h5ad
 
 logs/
-    glue_YYYYMMDD-HHMMSS.log
+    glue.log
 ```
+
