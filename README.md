@@ -120,6 +120,7 @@ python 2.run_scglue.py \
 
 
 Output structure
+```bash
 model/
     glue_run_YYYYMMDD-HHMMSS/
         glue_model_*.dill
@@ -130,3 +131,4 @@ model/
 
 logs/
     glue_YYYYMMDD-HHMMSS.log
+```
