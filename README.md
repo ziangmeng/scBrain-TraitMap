@@ -1,14 +1,17 @@
 # Overview
 
-**scBrain-TraitMap** is a lightweight and reproducible computational framework designed to integrate **single-cell RNA-seq (scRNA-seq)**, **single-cell ATAC-seq (scATAC-seq)**, and **genomic regulatory graphs** to generate a harmonized embedding of brain cell populations. Built upon the SCGLUE model, the pipeline enables the construction of cross-modality embeddings, joint visualization, and downstream trait-mapping analyses in human brain datasets.
+**scBrain-TraitMap** is a streamlined and reproducible framework for integrating **single-cell RNA-seq (scRNA-seq)**, **single-cell ATAC-seq (scATAC-seq)**, and **regulatory guidance graphs** into a unified analytical pipeline. Built on the SCGLUE model, the framework aligns transcriptomic and epigenomic cells into a shared latent space, enabling subtype transfer, peak-level annotation, and downstream trait–cell-type mapping.
+
 ![Image text](fig1.png)
+
 The framework provides:
 
-- A fully script-based pipeline with clear input/output structure (`./data`, `./model`, `./logs`).
-- Automated preprocessing, feature selection, PCA/LSI computation, and harmonized cell-type assignment.
-- Graph-guided integration of RNA and ATAC modalities using SCGLUE.
-- Consistent UMAP embeddings for both modalities in shared space.
-- Easy customization of training hyperparameters through command-line options.
-- Journal-ready reproducibility with transparent logging and version-freezing.
+- A script-based, modular pipeline with a clean directory structure (`./data`, `./model`, `./logs`).
+- Automated preprocessing, PCA/LSI computation, and harmonized cell-type annotations.
+- Cross-modality integration of scRNA-seq and scATAC-seq using SCGLUE with a user-supplied guidance graph.
+- KNN-based label transfer from RNA to ATAC cells within the shared embedding.
+- Extraction of cell-type–specific accessible peaks for S-LDSC enrichment analysis.
+- Easy hyperparameter tuning through both command-line arguments and in-script defaults.
+- Reproducible execution with transparent logging and version control.
 
-scBrain-TraitMap is intended for researchers studying cell-type-specific regulatory architecture, multimodal single-cell integration, and the mapping of complex trait signals to brain cellular contexts.
+scBrain-TraitMap is designed for researchers aiming to study cell-type–resolved regulatory landscapes and to map complex-trait associations onto specific neural populations in the human brain.
