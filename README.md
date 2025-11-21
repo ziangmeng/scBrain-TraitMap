@@ -138,71 +138,34 @@ logs/
 ```
 
 """
-==============================================================
-Part 3 — SCGLUE Embedding Loading & subCluster Harmonization
-==============================================================
+## 3. Label Transfer and Peak Preparation
 
-This script performs the following functions:
+This script performs three tasks required before generating LDSC peaksets:
 
-1. -----------------------------------------------------------
-   Resolve project structure
-   -----------------------------------------------------------
-   - Automatically locates:
-        model/glue_run/rna_with_Xglue.h5ad
-        model/glue_run/atac_with_Xglue.h5ad
-   - Ensures paths are correct under the project root.
-   - Prints the resolved file paths for reproducibility.
+1. **Load processed SCGLUE outputs**  
+   Load `rna_with_Xglue.h5ad` and `atac_with_Xglue.h5ad` from `model/glue_run/`.  
+   These files contain the 50-dimensional SCGLUE embeddings that place RNA and ATAC
+   cells in a shared latent space.
 
-2. -----------------------------------------------------------
-   Load RNA / ATAC AnnData objects
-   -----------------------------------------------------------
-   - Loads both modalities using anndata.read_h5ad().
-   - Prints basic shape information:
-        RNA : (n_cells, n_genes)
-        ATAC: (n_cells, n_peaks)
+2. **Standardize RNA subCluster labels**  
+   Ensure `subCluster` is a clean string annotation.  
+   Replace "Unknown" labels using `H2_annotation` (if available) to ensure that all
+   RNA cells have valid cluster identities.  
+   This step ensures downstream label transfer will not fail due to inconsistent
+   categories.
 
-3. -----------------------------------------------------------
-   Standardize RNA subCluster annotation
-   -----------------------------------------------------------
-   Why this step?
-   - Some RNA cells have "Unknown" subCluster labels.
-   - The glue alignment requires consistent, meaningful
-     biological labels.
-   - If H2_annotation exists, use it to replace "Unknown".
+3. **Check SCGLUE embeddings**  
+   Confirm both RNA and ATAC contain `obsm["X_glue"]`.  
+   Print their shapes to verify alignment in embedding dimensions.  
+   These embeddings are used for KNN-based ATAC→RNA label transfer.
 
-   Steps:
-   - Check presence of rna.obs["subCluster"].
-   - Convert to string type.
-   - Replace "Unknown" using H2_annotation if available.
-   - Print the updated subCluster frequency table.
+### Summary
+Running this script prepares all inputs needed for:
+- ATAC subCluster assignment (strict / relaxed / fallback stages)
+- Specific peak selection for each subCluster
+- LDSC annotation and heritability enrichment analysis
 
-4. -----------------------------------------------------------
-   Verify SCGLUE embeddings ("X_glue")
-   -----------------------------------------------------------
-   SCGLUE produces a shared embedding for cross-modality mapping.
-   This step ensures:
-   - Both RNA and ATAC contain obsm["X_glue"].
-   - Their embedding dimensionality matches.
-
-   This is essential before running:
-     • KNN label transfer
-     • Cell-type assignment refinement
-     • Peak set selection and LDSC analysis
-
-5. -----------------------------------------------------------
-   Output
-   -----------------------------------------------------------
-   After this script:
-   - RNA.obs["subCluster"] is clean and usable.
-   - RNA / ATAC embeddings are loaded.
-   - Both modalities now share the same 50D SCGLUE latent space.
-
-This script is the foundation for downstream steps:
-✓ KNN voting-based label transfer  
-✓ multi-stage assignment pipeline (strict → relaxed → fallback)  
-✓ ATAC peak specificity scoring  
-✓ generation of cluster-specific LDSC peak sets  
-
-==============================================================
+The output of this step is a cleaned RNA object and an ATAC object ready for label transfer.
 """
+
 
