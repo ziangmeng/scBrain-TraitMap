@@ -138,34 +138,18 @@ logs/
 ```
 
 """
-## 3. Label Transfer and Peak Preparation
+## 3. Label Transfer and Specific Peak Selection
 
-This script performs three tasks required before generating LDSC peaksets:
-
-1. **Load processed SCGLUE outputs**  
-   Load `rna_with_Xglue.h5ad` and `atac_with_Xglue.h5ad` from `model/glue_run/`.  
-   These files contain the 50-dimensional SCGLUE embeddings that place RNA and ATAC
-   cells in a shared latent space.
-
-2. **Standardize RNA subCluster labels**  
-   Ensure `subCluster` is a clean string annotation.  
-   Replace "Unknown" labels using `H2_annotation` (if available) to ensure that all
-   RNA cells have valid cluster identities.  
-   This step ensures downstream label transfer will not fail due to inconsistent
-   categories.
-
-3. **Check SCGLUE embeddings**  
-   Confirm both RNA and ATAC contain `obsm["X_glue"]`.  
-   Print their shapes to verify alignment in embedding dimensions.  
-   These embeddings are used for KNN-based ATAC→RNA label transfer.
-
-### Summary
-Running this script prepares all inputs needed for:
-- ATAC subCluster assignment (strict / relaxed / fallback stages)
-- Specific peak selection for each subCluster
-- LDSC annotation and heritability enrichment analysis
-
-The output of this step is a cleaned RNA object and an ATAC object ready for label transfer.
+This script loads the SCGLUE-integrated RNA/ATAC data, cleans RNA subCluster labels,
+and assigns ATAC cells to RNA subClusters using SCGLUE embeddings through a three-step
+procedure (strict KNN voting → relaxed reassignment → centroid fallback). The resulting
+labels are stored as `assigned_subCluster_v2`, together with confidence and assignment
+stage. Using these transferred labels, the script then identifies cluster-specific ATAC
+peaks by computing within-cluster prevalence, log2 fold-change, and Jensen–Shannon
+divergence, followed by a relaxed fallback strategy to ensure each cluster has sufficient
+peaks. All selected peaks are written as BED files under `ldsc_peaksets/`, together with
+`specific_peak_counts.tsv` for downstream LDSC partitioned heritability analysis.
 """
+
 
 
