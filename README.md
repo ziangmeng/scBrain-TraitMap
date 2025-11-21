@@ -137,3 +137,72 @@ logs/
     glue.log
 ```
 
+"""
+==============================================================
+Part 3 — SCGLUE Embedding Loading & subCluster Harmonization
+==============================================================
+
+This script performs the following functions:
+
+1. -----------------------------------------------------------
+   Resolve project structure
+   -----------------------------------------------------------
+   - Automatically locates:
+        model/glue_run/rna_with_Xglue.h5ad
+        model/glue_run/atac_with_Xglue.h5ad
+   - Ensures paths are correct under the project root.
+   - Prints the resolved file paths for reproducibility.
+
+2. -----------------------------------------------------------
+   Load RNA / ATAC AnnData objects
+   -----------------------------------------------------------
+   - Loads both modalities using anndata.read_h5ad().
+   - Prints basic shape information:
+        RNA : (n_cells, n_genes)
+        ATAC: (n_cells, n_peaks)
+
+3. -----------------------------------------------------------
+   Standardize RNA subCluster annotation
+   -----------------------------------------------------------
+   Why this step?
+   - Some RNA cells have "Unknown" subCluster labels.
+   - The glue alignment requires consistent, meaningful
+     biological labels.
+   - If H2_annotation exists, use it to replace "Unknown".
+
+   Steps:
+   - Check presence of rna.obs["subCluster"].
+   - Convert to string type.
+   - Replace "Unknown" using H2_annotation if available.
+   - Print the updated subCluster frequency table.
+
+4. -----------------------------------------------------------
+   Verify SCGLUE embeddings ("X_glue")
+   -----------------------------------------------------------
+   SCGLUE produces a shared embedding for cross-modality mapping.
+   This step ensures:
+   - Both RNA and ATAC contain obsm["X_glue"].
+   - Their embedding dimensionality matches.
+
+   This is essential before running:
+     • KNN label transfer
+     • Cell-type assignment refinement
+     • Peak set selection and LDSC analysis
+
+5. -----------------------------------------------------------
+   Output
+   -----------------------------------------------------------
+   After this script:
+   - RNA.obs["subCluster"] is clean and usable.
+   - RNA / ATAC embeddings are loaded.
+   - Both modalities now share the same 50D SCGLUE latent space.
+
+This script is the foundation for downstream steps:
+✓ KNN voting-based label transfer  
+✓ multi-stage assignment pipeline (strict → relaxed → fallback)  
+✓ ATAC peak specificity scoring  
+✓ generation of cluster-specific LDSC peak sets  
+
+==============================================================
+"""
+
