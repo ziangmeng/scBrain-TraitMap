@@ -151,7 +151,7 @@ peaks. All selected peaks are written as BED files under `ldsc_peaksets/`, toget
 `specific_peak_counts.tsv` for downstream LDSC partitioned heritability analysis.
 """
 
-LDSC Pipeline README (Concise)
+## 4.LDSC Pipeline README (Concise)
 
 Requirements:
 - User must prepare LDSC reference files manually:
