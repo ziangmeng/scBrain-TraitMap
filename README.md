@@ -17,7 +17,7 @@ The framework provides:
 scBrain-TraitMap is designed for researchers aiming to study cell-type–resolved regulatory landscapes and to map complex-trait associations onto specific neural populations in the human brain.
 
 
-## 1. Building the Guidance Graph
+## 1. Building the Guidance Graph(1.build_guidance_graphy.ipynb)
 
 This notebook generates the *guidance graph* required for SCGLUE-based cross-modality integration.  
 The graph encodes regulatory relationships between genes (from scRNA-seq) and chromatin-accessible regions (from scATAC-seq), and serves as the structural prior that anchors the two modalities in a shared latent space.
@@ -138,7 +138,7 @@ logs/
 ```
 
 """
-## 3. Label Transfer and Specific Peak Selection
+## 3. Label Transfer and Specific Peak Selection(3.label_transfer_and_peak_selection.ipynb)
 
 This script loads the SCGLUE-integrated RNA/ATAC data, cleans RNA subCluster labels,
 and assigns ATAC cells to RNA subClusters using SCGLUE embeddings through a three-step
@@ -151,7 +151,7 @@ peaks. All selected peaks are written as BED files under `ldsc_peaksets/`, toget
 `specific_peak_counts.tsv` for downstream LDSC partitioned heritability analysis.
 """
 
-## 4.LDSC Pipeline README 
+## 4.LDSC Pipeline (4.run_ldsc_pipeline.sh)
 
 Requirements:
 - User must prepare LDSC reference files manually:
@@ -177,5 +177,44 @@ Usage:
 6. Output will be saved to the ldsc folder:
    - Per-cell per-GWAS h2 results
    - Combined matrices: combined_z.tsv, combined_coef.tsv, combined_se.tsv
+
+
+## 5. Cluster × Trait Hotmap Analysis (5.hotmap.ipynb)
+
+This notebook visualizes cell-type × trait associations by:
+   (1) Loading the combined LDSC Z-score matrix (combined_z.tsv)
+   (2) Mapping trait Z-scores to scRNA-seq subclusters
+   (3) Generating a Z-score heatmap with significance markers
+   (4) Projecting selected trait Z-scores back to spatial coordinates
+
+ Required Input Files:
+   • ./data/scrna_gw34_minimal_subCluster_spatial.h5ad
+       - Contains subCluster labels, sample_id, and spatial coordinates
+   • ./ldsc/scatac/_combined/combined_z.tsv
+       - Row = subCluster, Column = trait (Z-scores)
+
+ Major Steps:
+   1. Clean and harmonize trait names
+   2. Aggregate duplicated traits (e.g., multiple hippocampal IDPs)
+   3. Sort clusters and traits by max |Z|
+   4. Mark significant associations (|Z| ≥ 3)
+   5. Mark top-3 strongest clusters for each trait (***, **, *)
+   6. Add Z__TRAIT columns to scrna.obs and create scrna.obsm["Z_diseases"]
+   7. Produce:
+        (a) A cluster × trait Z-score heatmap
+        (b) A spatial Z-score map for a selected trait (e.g., SCZ)
+
+ Notes:
+   • All figures are computed from the actual dataset.
+   • Example demonstration figures (not identical to your results):
+
+        ![Image text](fig2.png)
+        ![Image text](fig3.png)
+
+     These are placeholders only and will differ from your scientific results.
+
+End of README
+
+
 
 
