@@ -208,8 +208,8 @@ This notebook visualizes cell-type × trait associations by:
    • All figures are computed from the actual dataset.
    • Example demonstration figures (not identical to your results):
 
-        ![Image text](fig2.png)
-        ![Image text](fig3.png)
+![Image text](fig2.png)
+![Image text](fig3.png)
 
      These are placeholders only and will differ from your scientific results.
 
