@@ -16,6 +16,55 @@ The framework provides:
 
 scBrain-TraitMap is designed for researchers aiming to study cell-type–resolved regulatory landscapes and to map complex-trait associations onto specific neural populations in the human brain.
 
+This project uses two separate Conda environments, reflecting the different dependencies required for SCGLUE-based multimodal integration and LDSC partitioned heritability analyses.
+
+A. glue environment
+Used for:
+- 1. Building the Guidance Graph (1.build_guidance_graph.ipynb)
+- 2. SCGLUE Cross-Modality Integration (2.run_scglue.py)
+- 3. Label Transfer and Peak Selection (3.label_transfer_and_peak_selection.ipynb)
+- 5. Cluster × Trait Heatmap Analysis (5.hotmap.ipynb)
+
+Key packages in the glue environment:
+- Python 3.x
+- scanpy 1.9.8
+- scglue 0.4.0
+- anndata 0.11.4
+- muon 0.1.7
+- matplotlib 3.10.6
+- seaborn 0.13.2
+- numpy 1.24.4
+- scipy 1.10.1
+- pandas 2.0.3
+- torch 2.2.2
+- umap-learn 0.5.9
+- pybedtools 0.12.0
+- pysam 0.23.3
+
+Full package list:
+conda activate glue
+conda list
+
+B. ldsc_py2 environment
+Used exclusively for:
+- 4. LDSC Pipeline (4.run_ldsc_pipeline.sh)
+
+Key packages in the ldsc_py2 environment:
+- Python 2.7
+- numpy 1.16.6
+- scipy 1.2.1
+- pandas 0.24.2
+- bitarray 0.9.3
+- pybedtools 0.7.10
+- pysam 0.17.0
+
+Full package list:
+conda activate ldsc_py2
+conda list
+
+Notes:
+- The two environments are intentionally isolated because LDSC requires legacy Python dependencies.
+- Users replicating the pipeline should recreate both environments for full reproducibility.
 
 ## 1. Building the Guidance Graph(1.build_guidance_graphy.ipynb)
 
