@@ -180,19 +180,9 @@ Usage:
 
 
 ## 5. Cluster × Trait Hotmap Analysis (5.hotmap.ipynb)
- Major Steps:
-   1. Clean and harmonize trait names
-   2. Aggregate duplicated traits (e.g., multiple hippocampal IDPs)
-   3. Sort clusters and traits by max |Z|
-   4. Mark significant associations (|Z| ≥ 3)
-   5. Mark top-3 strongest clusters for each trait (***, **, *)
-   6. Add Z__TRAIT columns to scrna.obs and create scrna.obsm["Z_diseases"]
-   7. Produce:
-        (a) A cluster × trait Z-score heatmap
-        (b) A spatial Z-score map for a selected trait (e.g., SCZ)
-
+This notebook visualizes cell-type × trait associations derived from LDSC results and projects selected traits back onto spatial coordinates.
  Notes:
-   • All figures are computed from the actual dataset.
+   • All figures are computed from the example dataset.
    • Example demonstration figures (not identical to your results):
 
 ![Image text](fig2.png)
