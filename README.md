@@ -151,5 +151,31 @@ peaks. All selected peaks are written as BED files under `ldsc_peaksets/`, toget
 `specific_peak_counts.tsv` for downstream LDSC partitioned heritability analysis.
 """
 
+LDSC Pipeline README (Concise)
+
+Requirements:
+- User must prepare LDSC reference files manually:
+  - ldsc.py (Python2 version)
+  - 1000 Genomes Phase 3 EUR PLINK files: 1000G.EUR.QC.{bed,bim,fam}
+  - HapMap3 SNP list: w_hm3.snplist
+  - Baseline annotation: baseline_plus_EC.hm3pruned.{1..22}.l2.ldscore.gz
+  - LD weights: weights.hm3_noMHC.{1..22}.l2.ldscore.gz
+
+Environment:
+- Must use Python2 environment (LDSC official requirement)
+- Required packages: numpy, scipy, pandas, bitarray, six
+- System tools required: bedtools, gzip, awk, sed, xargs, bash>=4.0
+
+Usage:
+1. Prepare cell-type-specific BED files (from Step 3)
+2. Prepare LDSC-formatted GWAS summary statistics
+3. Edit paths at top of run_ldsc_pipeline.sh
+4. Run:
+   ```bash
+   bash run_ldsc_pipeline.sh
+   ```
+6. Output will be saved to the ldsc folder:
+   - Per-cell per-GWAS h2 results
+   - Combined matrices: combined_z.tsv, combined_coef.tsv, combined_se.tsv
 
 
