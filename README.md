@@ -187,10 +187,9 @@ This notebook visualizes cell-type × trait associations derived from LDSC resul
 
 ![Image text](fig2.png)
 ![Image text](fig3.png)
+These are placeholders only and will differ from your scientific results.
 
-     These are placeholders only and will differ from your scientific results.
 
-End of README
 
 
 
