@@ -180,19 +180,6 @@ Usage:
 
 
 ## 5. Cluster × Trait Hotmap Analysis (5.hotmap.ipynb)
-
-This notebook visualizes cell-type × trait associations by:
-   (1) Loading the combined LDSC Z-score matrix (combined_z.tsv)
-   (2) Mapping trait Z-scores to scRNA-seq subclusters
-   (3) Generating a Z-score heatmap with significance markers
-   (4) Projecting selected trait Z-scores back to spatial coordinates
-
- Required Input Files:
-   • ./data/scrna_gw34_minimal_subCluster_spatial.h5ad
-       - Contains subCluster labels, sample_id, and spatial coordinates
-   • ./ldsc/scatac/_combined/combined_z.tsv
-       - Row = subCluster, Column = trait (Z-scores)
-
  Major Steps:
    1. Clean and harmonize trait names
    2. Aggregate duplicated traits (e.g., multiple hippocampal IDPs)
