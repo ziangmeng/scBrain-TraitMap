@@ -41,10 +41,6 @@ Key packages in the glue environment:
 - pybedtools 0.12.0
 - pysam 0.23.3
 
-Full package list:
-conda activate glue
-conda list
-
 B. ldsc_py2 environment
 Used exclusively for:
 - 4. LDSC Pipeline (4.run_ldsc_pipeline.sh)
@@ -57,10 +53,6 @@ Key packages in the ldsc_py2 environment:
 - bitarray 0.9.3
 - pybedtools 0.7.10
 - pysam 0.17.0
-
-Full package list:
-conda activate ldsc_py2
-conda list
 
 Notes:
 - The two environments are intentionally isolated because LDSC requires legacy Python dependencies.
