@@ -15,9 +15,6 @@
 ![Image text](fig1.png)
 ## Table of Contents
 - [Overview](#overview)
-- [Environments](#environments)
-  - [A. glue environment](#a-glue-environment)
-  - [B. ldsc_py2 environment](#b-ldsc_py2-environment)
 - [1. Building the Guidance Graph](#1-building-the-guidance-graph1build_guidance_graphyipynb)
 - [2. SCGLUE Cross-Modality Integration](#2-scglue-cross-modality-integration-2run_scgluepy)
 - [3. Label Transfer and Specific Peak Selection](#3-label-transfer-and-specific-peak-selection3label_transfer_and_peak_selectionipynb)
