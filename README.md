@@ -1,3 +1,13 @@
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Language-Python](https://img.shields.io/badge/language-Python-blue)
+![Language-R](https://img.shields.io/badge/language-R-blue)
+![Language-Shell](https://img.shields.io/badge/language-shell-4EAA25)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Linux](https://img.shields.io/badge/OS-Linux-black?logo=linux&logoColor=white)
+![SCGLUE](https://img.shields.io/badge/SCGLUE-0.4.0-purple)
+![Scanpy](https://img.shields.io/badge/Scanpy-1.9.8-orange)
+![LDSC](https://img.shields.io/badge/LDSC-Python2-important)
+
 # Overview
 
 **scBrain-TraitMap** is a streamlined and reproducible framework for integrating **single-cell RNA-seq (scRNA-seq)**, **single-cell ATAC-seq (scATAC-seq)**, and **GWAS data** into a unified analytical pipeline. Built on the SCGLUE model, the framework aligns transcriptomic and epigenomic cells into a shared latent space, enabling subtype transfer, peak-level annotation, and downstream trait–cell-type mapping.
